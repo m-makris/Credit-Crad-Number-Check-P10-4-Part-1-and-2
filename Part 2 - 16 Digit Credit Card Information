@@ -1,0 +1,106 @@
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+#include <iomanip>
+#include <string>
+#include <vector>
+#include <string>
+#include <cctype>
+using namespace std;
+
+bool isCardValid(int digit[], int size);
+bool isNumeric(string s);
+bool isCorrectLength( string s);
+    
+
+int main() {
+    string cardNumber;
+    while (true) {
+    cout << "Enter an 16-digit credit card number # or Q to quit: ";
+    getline(cin, cardNumber);
+    if(cin.fail())break;
+    int length = cardNumber.length();
+    int arr[length];
+    
+
+    
+        // Output the result
+        if (isCardValid(arr, length) == true && isNumeric(cardNumber) == true && isCorrectLength(cardNumber) == true) 
+        {
+            cout << "The card number is valid.\n";
+        } 
+        else 
+        {
+            cout << "The card number is invalid.\n";
+        }
+    
+        return 0;
+    }
+
+}
+
+bool isCardValid(int digit[], int size)
+{
+    int sum1 = 0;  // Sum of every other digit starting from the rightmost digit
+    int sum2 = 0;  // Sum of doubled digits and their individual digits
+    int card = 0;
+
+    // Sum every other digit starting from the rightmost (right to left)
+    for (int i = 0; i < size; i++) 
+    {
+       
+        if(i % 2 == 0) {
+         card = digit[i] * 2;
+         sum1 += card % 10;
+         sum1 += card / 10;
+        }
+        else{
+         sum2+= digit[i];
+        }
+        
+    }
+        if((sum1 + sum2) % 10 == 0){
+            return true;
+        }
+        else
+        {
+         return false;   
+        }
+}
+
+  
+
+
+
+bool isNumeric(string s)
+{
+
+    for(char c: s)
+    {
+        if(c == '-')
+        {
+            return false;
+        }
+        else if(!isdigit(c)) {
+            return false;
+        }
+        
+    
+    } 
+    return true;
+}
+
+bool isCorrectLength (string s)
+{
+    int count = 0; 
+    for(char c: s){
+        if(isdigit(c)){
+            count++;
+        }
+        if(count == 16){
+            return true;
+        }
+    }
+    return false;
+    
+}
