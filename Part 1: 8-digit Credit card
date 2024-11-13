@@ -1,0 +1,70 @@
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+#include <iomanip>
+#include <string>
+#include <vector>
+#include <string>
+using namespace std;
+
+bool isCardValid(int digit[], int size);
+
+    
+
+int main() {
+    long long cardNumber;
+    cout << "Enter an 8-digit credit card number # or Q to quit: ";
+    cin >> cardNumber;
+    while(cardNumber > 0){
+    if(cardNumber == 'q' || cardNumber == 'Q')break;
+    
+    // Convert the card number into an array of digits
+    vector<int> digit;
+    while (cardNumber > 0) 
+    {
+        digit.push_back(cardNumber % 10);
+        cardNumber /= 10;
+    }
+
+    // Reverse the array since the digits were collected from right to left //looked up w
+    reverse(digit.begin(), digit.end());
+
+    // Call isCardValid with the digits array
+    bool valid = isCardValid(digit.data(), digit.size());
+
+    // Output the result
+    if (valid) 
+    {
+        cout << "The card number is valid.\n";
+    } 
+    else 
+    {
+        cout << "The card number is invalid.\n";
+    }
+
+    return 0;
+}
+}
+
+bool isCardValid(int digit[], int size)
+{
+    int sum1 = 0;  // Sum of every other digit starting from the rightmost digit
+    int sum2 = 0;  // Sum of doubled digits and their individual digits
+
+    // Sum every other digit starting from the rightmost (right to left)
+    for (int i = size - 1; i >= 0; i -= 2) 
+    {
+        sum1 += digit[i];
+    }
+
+    // Double every other digit and add the digits of the resulting numbers
+    for (int i = size - 2; i >= 0; i -= 2) {
+        int doubled = digit[i] * 2;
+        // Add the individual digits of the doubled number ( 18 -> 1 + 8)
+        sum2 += (doubled / 10) + (doubled % 10);
+    }
+
+    //Check if the sum of both parts has a last digit of 0
+    int totalSum = sum1 + sum2;
+    return (totalSum % 10 == 0);
+}
